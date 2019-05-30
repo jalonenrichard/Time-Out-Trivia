@@ -17,6 +17,17 @@
         </div>
       </div>
     </section>
+    <b-modal v-model="showModal" centered title="Whoops!" ok-title="New Game" ok-only>
+      Answer '
+      <span id="wrong-answer">{{answer}}</span>' was wrong to question:
+      <p v-html="question_data.question"></p>Game Over!
+      <br>
+      Total Score: {{score}}
+      <template slot="modal-footer" slot-scope="{ ok }">
+        <!-- Emulate built in modal footer ok and cancel button actions -->
+        <b-button size="sm" variant="success" @click="ok();startNewGame()">New Game</b-button>
+      </template>
+    </b-modal>
   </div>
 </template>
 
@@ -63,6 +74,10 @@
 #loading-spinner {
   margin-top: 2em;
 }
+
+#wrong-answer {
+  color: red;
+}
 </style>
 
 <script>
@@ -73,7 +88,9 @@ export default {
     return {
       question_data: "",
       score: 0,
-      isLoading: false
+      isLoading: false,
+      showModal: false,
+      answer: ""
     };
   },
   beforeMount() {
@@ -89,6 +106,8 @@ export default {
         this.isLoading = true;
         this.score++;
         this.apiCall();
+      } else {
+        this.gameOver(answer);
       }
     },
     apiCall: function() {
@@ -99,6 +118,15 @@ export default {
             (this.question_data = res.data.results[0]), (this.isLoading = false)
           )
         );
+    },
+    gameOver: function(answer) {
+      this.answer = answer;
+      this.showModal = true;
+    },
+    startNewGame: function() {
+      this.score = 0;
+      this.isLoading = true;
+      this.apiCall();
     }
   }
 };
