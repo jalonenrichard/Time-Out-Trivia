@@ -9,7 +9,10 @@
             <br>
             <p v-html="question_data.question"></p>
             <br>
-            <div id="buttons-div">
+            <div v-if="isGameOver">
+              <a class="button is-primary is-rounded" v-on:click="startNewGame()">New Game</a>
+            </div>
+            <div v-else id="buttons-div">
               <a class="button is-primary is-rounded" v-on:click="checkAnswer('True')">TRUE</a>
               <a class="button is-danger is-rounded" v-on:click="checkAnswer('False')">FALSE</a>
             </div>
@@ -19,7 +22,7 @@
     </section>
     <b-modal v-model="showModal" centered title="Whoops!" ok-title="New Game" ok-only>
       Answer '
-      <span id="wrong-answer">{{answer}}</span>' was wrong to question:
+      <span id="wrong-answer">{{wrongAnswer}}</span>' was wrong to question:
       <p v-html="question_data.question"></p>Game Over!
       <br>
       Total Score: {{score}}
@@ -90,7 +93,8 @@ export default {
       score: 0,
       isLoading: false,
       showModal: false,
-      answer: ""
+      isGameOver: false,
+      wrongAnswer: ""
     };
   },
   beforeMount() {
@@ -107,7 +111,8 @@ export default {
         this.score++;
         this.apiCall();
       } else {
-        this.gameOver(answer);
+        this.wrongAnswer = answer;
+        this.gameOver();
       }
     },
     apiCall: function() {
@@ -119,12 +124,13 @@ export default {
           )
         );
     },
-    gameOver: function(answer) {
-      this.answer = answer;
+    gameOver: function() {
+      this.isGameOver = true;
       this.showModal = true;
     },
     startNewGame: function() {
       this.score = 0;
+      this.isGameOver = false;
       this.isLoading = true;
       this.apiCall();
     }
