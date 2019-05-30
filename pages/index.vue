@@ -1,15 +1,11 @@
 <template>
   <section class="container">
     <div>
-      <h1 class="title">
-        time-out-trivia
-      </h1>
-      <h2 class="subtitle">
-        Simple Yes-No answer trivia web-app (school project)
-      </h2>
+      {{questions}}
+      <br>
+      <a class="button is-primary is-rounded">TRUE</a>
+      <a class="button is-danger is-rounded">FALSE</a>
     </div>
-
-
   </section>
 </template>
 
@@ -24,8 +20,8 @@
 }
 
 .title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   display: block;
   font-weight: 300;
   font-size: 100px;
@@ -47,21 +43,19 @@
 </style>
 
 <script>
-
 export default {
   components: {},
-  
+
   data() {
     return {
-      questions : []
-    }
+      questions: []
+    };
   },
 
-  mounted(){
-    this.$axios.get('https://opentdb.com/api.php?amount=10&type=boolean')
-    .then(res => 
-    this.questions = res
-    )
+  mounted() {
+    this.$axios
+      .get("https://opentdb.com/api.php?amount=10&type=boolean")
+      .then(res => (this.questions = res.data.results[0].question));
   }
-}
+};
 </script>
