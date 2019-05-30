@@ -13,6 +13,7 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.5.2",
     "@nuxtjs/bulma": "^1.2.1",
+    "bootstrap-vue": "^2.0.0-rc.21",
     "cross-env": "^5.2.0",
     "nuxt": "^2.4.0"
   },

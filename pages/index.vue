@@ -2,14 +2,17 @@
   <div id="whole-page-div">
     <section class="container" id="question-section">
       <div id="question-div">
-        <div>
-          <div id="score-counter">SCORE: {{score}}</div>
-          <br>
-          <p v-html="question_data.question"></p>
-          <br>
-          <div id="buttons-div">
-            <a class="button is-primary is-rounded" v-on:click="checkAnswer('True')">TRUE</a>
-            <a class="button is-danger is-rounded" v-on:click="checkAnswer('False')">FALSE</a>
+        <div id="score-counter">SCORE: {{score}}</div>
+        <div id="question-div-content">
+          <b-spinner v-if="isLoading" label="Loading..." id="loading-spinner"></b-spinner>
+          <div v-else>
+            <br>
+            <p v-html="question_data.question"></p>
+            <br>
+            <div id="buttons-div">
+              <a class="button is-primary is-rounded" v-on:click="checkAnswer('True')">TRUE</a>
+              <a class="button is-danger is-rounded" v-on:click="checkAnswer('False')">FALSE</a>
+            </div>
           </div>
         </div>
       </div>
@@ -28,13 +31,14 @@
 }
 
 #question-div {
-  min-width: 40em;
+  min-height: 20em;
+  min-width: 100%;
   color: white;
   padding: 5em;
   background: rgba(0, 0, 0, 0.5);
 }
 
-#buttons-div {
+#question-div-content {
   margin-top: 2em;
 }
 
@@ -46,9 +50,18 @@
 
 #score-counter {
   margin-bottom: 2em;
+  width: 8em;
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
   border: 1px solid rgb(77, 77, 77);
-  border-radius: 5px;
-  padding-right: 1em;
+  border-radius: 10px;
+}
+
+#loading-spinner {
+  margin-top: 2em;
 }
 </style>
 
@@ -59,10 +72,13 @@ export default {
   data() {
     return {
       question_data: "",
-      score: 0
+      score: 0,
+      isLoading: false
     };
   },
-
+  beforeMount() {
+    this.isLoading = true;
+  },
   mounted() {
     this.apiCall();
   },
@@ -70,6 +86,7 @@ export default {
   methods: {
     checkAnswer: function(answer) {
       if (this.question_data.correct_answer == answer) {
+        this.isLoading = true;
         this.score++;
         this.apiCall();
       }
@@ -77,7 +94,11 @@ export default {
     apiCall: function() {
       this.$axios
         .get("https://opentdb.com/api.php?amount=1&type=boolean")
-        .then(res => (this.question_data = res.data.results[0]));
+        .then(
+          res => (
+            (this.question_data = res.data.results[0]), (this.isLoading = false)
+          )
+        );
     }
   }
 };
