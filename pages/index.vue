@@ -13,7 +13,7 @@
               <a class="button is-primary is-rounded" v-on:click="startNewGame()">New Game</a>
             </div>
             <div v-else id="buttons-div">
-              <a class="button is-primary is-rounded" v-on:click="checkAnswer('True')">TRUE</a>
+              <a class="button is-success is-rounded" v-on:click="checkAnswer('True')">TRUE</a>
               <a class="button is-danger is-rounded" v-on:click="checkAnswer('False')">FALSE</a>
             </div>
           </div>
@@ -28,7 +28,7 @@
       Total Score: {{score}}
       <template slot="modal-footer" slot-scope="{ ok }">
         <!-- Emulate built in modal footer ok and cancel button actions -->
-        <b-button size="sm" variant="success" @click="ok();startNewGame()">New Game</b-button>
+        <b-button size="sm" variant="primary" @click="ok();startNewGame()">New Game</b-button>
       </template>
     </b-modal>
   </div>
