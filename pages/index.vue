@@ -21,8 +21,7 @@
       </div>
     </section>
     <b-modal v-model="showModal" centered title="Whoops!" ok-title="New Game" ok-only>
-      Answer '
-      <span id="wrong-answer">{{wrongAnswer}}</span>' was wrong to question:
+      Answer '<span id="wrong-answer">{{wrongAnswer}}</span>' was wrong to question:
       <p v-html="question_data.question"></p>Game Over!
       <br>
       Total Score: {{score}}
